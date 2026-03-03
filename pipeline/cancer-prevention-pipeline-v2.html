@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAHA Cancer Prevention Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #4FC3F7;
+    --sky-light: #e3f6fe;
+    --lavender: #bfacfe;
+    --lavender-light: #f0ecff;
+    --teal: #008081;
+    --teal-light: #e0f4f4;
+    --navy: #003366;
+    --navy-light: #e6ecf5;
+    --white: #f9f9f9;
+    --border: #d0dde8;
+    --text-main: #0d1e30;
+    --text-muted: #5a7090;
+    --ai-gold: #f0a500;
+    --ai-gold-light: #fef7e6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--white);
+    color: var(--text-main);
+    padding: 40px 24px 64px;
+  }
+
+  .page {
+    max-width: 1060px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ─────────────────────────────────────── */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .header-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--navy);
+    color: #a8c8e8;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .header-kicker span { color: var(--sky); }
+
+  h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(18px, 3vw, 28px);
+    color: var(--navy);
+    line-height: 1.3;
+    max-width: 700px;
+    margin: 0 auto 8px;
+  }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ── FLOW GRID (rows 1–3) ─────────────────────── */
+  .flow-layer {
+    display: grid;
+    gap: 0;
+    margin-bottom: 0;
+  }
+
+  /* Row 1: 4 columns */
+  .row-1 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    align-items: stretch;
+    position: relative;
+  }
+
+  /* Row 2: 2 columns */
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+    position: relative;
+  }
+
+  /* Row 3: 2 columns */
+  .row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  /* Row 4 (bottom info): 2 columns */
+  .row-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+    margin-top: 10px;
+  }
+
+  /* Arrow connectors between rows */
+  .arrow-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 0 4px;
+    gap: 0;
+  }
+
+  .arrow-row.row1-to-row2 {
+    /* wide right side: arrow from col 4 down to right col of row2 */
+    justify-content: flex-end;
+    padding-right: calc(25% + 6px);
+  }
+
+  .v-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .v-arrow .shaft {
+    width: 2.5px;
+    height: 20px;
+    background: linear-gradient(to bottom, var(--teal), var(--navy));
+    border-radius: 2px;
+  }
+
+  .v-arrow .head {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 9px solid var(--navy);
+  }
+
+  /* Horizontal arrow inside row */
+  .h-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 24px;
+    flex-shrink: 0;
+  }
+
+  .h-arrow .ha-shaft {
+    height: 2.5px;
+    width: 100%;
+    background: var(--teal);
+    border-radius: 2px;
+  }
+
+  /* ── NODE CARDS ─────────────────────────────────── */
+  .node {
+    border-radius: 12px;
+    padding: 14px 16px;
+    position: relative;
+    border: 1.5px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: box-shadow 0.2s;
+  }
+
+  .node:hover {
+    box-shadow: 0 6px 22px rgba(0,51,102,0.10);
+  }
+
+  .node-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 8px;
+    display: inline-block;
+    align-self: flex-start;
+  }
+
+  .node h3 {
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--navy);
+  }
+
+  .node p, .node ul {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .node ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .node ul li {
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .node ul li::before {
+    content: "·";
+    position: absolute;
+    left: 4px;
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1;
+    top: 1px;
+  }
+
+  /* Color themes */
+  .c-community {
+    background: var(--sky-light);
+    border-color: var(--sky);
+  }
+  .c-community .node-label { background: rgba(79,195,247,0.25); color: #1a6d90; }
+
+  .c-digital {
+    background: #fff8e6;
+    border-color: var(--ai-gold);
+  }
+  .c-digital .node-label { background: rgba(240,165,0,0.18); color: #8a5e00; }
+
+  .c-ai {
+    background: var(--ai-gold-light);
+    border-color: var(--ai-gold);
+    position: relative;
+  }
+  .c-ai .node-label { background: rgba(240,165,0,0.22); color: #8a5e00; }
+
+  .c-healthpod {
+    background: var(--teal-light);
+    border-color: var(--teal);
+  }
+  .c-healthpod .node-label { background: rgba(0,128,129,0.18); color: var(--teal); }
+
+  .c-screening {
+    background: var(--lavender-light);
+    border-color: var(--lavender);
+  }
+  .c-screening .node-label { background: rgba(191,172,254,0.3); color: #4a30b0; }
+
+  .c-clinician {
+    background: var(--navy-light);
+    border-color: #6a90b8;
+  }
+  .c-clinician .node-label { background: rgba(106,144,184,0.2); color: #2a4a70; }
+
+  .c-nazareth {
+    background: var(--navy);
+    border-color: var(--navy);
+  }
+  .c-nazareth h3, .c-nazareth p, .c-nazareth ul li { color: #c8ddf0; }
+  .c-nazareth h3 { color: white; }
+  .c-nazareth .node-label { background: rgba(255,255,255,0.15); color: #a8c8e8; }
+
+  .c-followup {
+    background: var(--teal-light);
+    border-color: var(--teal);
+  }
+  .c-followup .node-label { background: rgba(0,128,129,0.18); color: var(--teal); }
+
+  .c-wedge {
+    background: #f4f8fc;
+    border: 1.5px dashed #94b4cc;
+  }
+  .c-wedge .node-label { background: #dce8f0; color: #3a5a7a; }
+
+  .c-healthpod-def {
+    background: #eef8f8;
+    border: 1.5px dashed var(--teal);
+  }
+  .c-healthpod-def .node-label { background: rgba(0,128,129,0.18); color: var(--teal); }
+
+  /* Gender sub-grid */
+  .gender-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .gender-box {
+    border-radius: 6px;
+    padding: 7px 9px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #2a3a4a;
+  }
+
+  .gender-box strong {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .gw { background: #fce8f5; border-left: 3px solid #c060a0; }
+  .gw strong { color: #8a2060; }
+  .gm { background: #e8effe; border-left: 3px solid #4060c0; }
+  .gm strong { color: #2040a0; }
+
+  /* Row-arrow connectors */
+  .connector-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 0 6px;
+    gap: 4px;
+    position: relative;
+  }
+
+  /* Right-to-left arrow (row 1 col4 → row2 col2) */
+  .bend-right .shaft-h {
+    height: 2.5px;
+    background: var(--teal);
+    border-radius: 2px;
+  }
+
+  .bend-right .shaft-v {
+    width: 2.5px;
+    background: linear-gradient(to bottom, var(--teal), var(--navy));
+    border-radius: 2px;
+  }
+
+  /* Inter-row connecting svg arrows */
+  .svg-connector {
+    width: 100%;
+    overflow: visible;
+    display: block;
+  }
+
+  /* AI badge decoration */
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--ai-gold);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 7px 2px 5px;
+    border-radius: 10px;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+
+  .ai-badge::before {
+    content: "✦";
+    font-size: 8px;
+  }
+
+  /* Divider labels between rows */
+  .row-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 14px 0 10px;
+  }
+
+  .row-divider::before,
+  .row-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .row-divider span {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #8aa0b4;
+    white-space: nowrap;
+  }
+
+  /* Down arrow block */
+  .down-arrow-block {
+    display: flex;
+    justify-content: center;
+    padding: 6px 0;
+  }
+
+  .down-arrow-block.left { justify-content: flex-start; padding-left: 25%; }
+  .down-arrow-block.right { justify-content: flex-end; padding-right: 25%; }
+
+  .down-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .da-shaft {
+    width: 2px;
+    height: 18px;
+    background: linear-gradient(to bottom, var(--sky), var(--teal));
+  }
+
+  .da-head {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--teal);
+  }
+
+  /* Bent connector from row2 right → row3 left */
+  .bent-connector {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 26%;
+    padding-left: 26%;
+    gap: 0;
+    position: relative;
+    height: 36px;
+  }
+
+  /* Figure caption */
+  .caption-box {
+    margin-top: 32px;
+    border-top: 2px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .caption-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+
+  .caption-box p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* Horizontal flow arrows in rows */
+  .row-with-arrows {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .mini-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+    flex-shrink: 0;
+  }
+
+  .mini-arrow svg {
+    width: 22px;
+    height: 16px;
+  }
+
+  /* Wedge side-by-side labels */
+  .wedge-stage {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .wedge-stage:last-child { margin-bottom: 0; }
+
+  .stage-pill {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .stage-control { background: #dce8f4; color: var(--navy); }
+  .stage-intervention { background: rgba(0,128,129,0.18); color: var(--teal); }
+
+  .wedge-flow {
+    font-size: 11.5px;
+    color: #3a5a7a;
+    line-height: 1.6;
+  }
+
+  .wedge-flow em {
+    font-style: normal;
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-kicker">
+      Tujali Afya Health Alliance &nbsp;·&nbsp; <span>TAHA</span> &nbsp;·&nbsp; Figure 1
+    </div>
+    <h1>Community-to-Clinic Cancer Prevention Pipeline</h1>
+    <p class="header-sub">OCSI &rarr; HealthPod &rarr; AI-enabled Decision Support</p>
+  </div>
+
+  <!-- ══════════ ROW 1: 4 nodes ══════════ -->
+  <div class="row-1">
+
+    <!-- 1. Community -->
+    <div class="node c-community">
+      <span class="node-label">Community</span>
+      <h3>CHU / Community<br>CHP Outreach &amp; Enrollment</h3>
+      <p style="font-weight:600; color:#1a6d90; font-size:11px;">All month — continuous</p>
+      <ul>
+        <li>Homes, churches, markets, workplaces, boda groups</li>
+        <li>CHU auto-assigns enrolled cases to a named CHP</li>
+      </ul>
+    </div>
+
+    <!-- mini arrow -->
+    <div class="mini-arrow">
+      <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="8" x2="14" y2="8" stroke="#008081" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="13,4 21,8 13,12" fill="#003366"/>
+      </svg>
+    </div>
+
+    <!-- 2. Digital Prescreening -->
+    <div class="node c-digital">
+      <span class="node-label">Digital Platform</span>
+      <h3>Mobile Web Prescreening</h3>
+      <ul>
+        <li>QR code / web link → Supabase</li>
+        <li>Auto-assignment by CHU</li>
+      </ul>
+    </div>
+
+    <!-- mini arrow -->
+    <div class="mini-arrow">
+      <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="8" x2="14" y2="8" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="13,4 21,8 13,12" fill="#f0a500"/>
+      </svg>
+    </div>
+
+    <!-- 3. AI Decision Support -->
+    <div class="node c-ai">
+      <span class="node-label">Decision Support</span>
+      <div class="ai-badge">AI-enabled · Bounded</div>
+      <h3>Priority &bull; Booking &bull; Scripts<br>Follow-up Tasks</h3>
+      <ul>
+        <li>Green / Amber / Red triage routing</li>
+        <li>Counselling scripts (fear · cost · distance)</li>
+        <li>Session booking + automated reminders</li>
+        <li>Escalation triggers</li>
+      </ul>
+    </div>
+
+    <!-- mini arrow -->
+    <div class="mini-arrow">
+      <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="8" x2="14" y2="8" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="13,4 21,8 13,12" fill="#003366"/>
+      </svg>
+    </div>
+
+    <!-- 4. HealthPod -->
+    <div class="node c-healthpod">
+      <span class="node-label">HealthPod</span>
+      <h3>Monthly "Cancer Week"<br><span style="font-weight:500; font-size:12px;">(4-day service window)</span></h3>
+      <p style="font-size:11.5px; color: var(--teal); font-weight:600;">Nurse-led · Community-proximate</p>
+    </div>
+
+  </div><!-- /row-1 -->
+
+  <!-- connector: row1-col4 curves down-left to row2-col2 -->
+  <div style="display:flex; justify-content:flex-end; padding: 0 0 0 0; position:relative; height:34px;">
+    <svg width="100%" height="34" style="position:absolute; top:0; left:0;" viewBox="0 0 1060 34" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- From right-center of col4 (≈87.5%) downward, then left to center of col1-2 boundary (≈37.5%) -->
+      <path d="M 926 0 L 926 18 Q 926 28 916 28 L 400 28 Q 390 28 390 18 L 390 34" 
+            fill="none" stroke="#008081" stroke-width="2.5" stroke-linecap="round"/>
+      <polygon points="384,28 390,36 396,28" fill="#003366"/>
+    </svg>
+  </div>
+
+  <!-- ══════════ ROW 2: screening + clinician ══════════ -->
+  <div style="display:grid; grid-template-columns:1fr 28px 1fr; gap:0; align-items:stretch;">
+
+    <!-- Screening -->
+    <div class="node c-screening">
+      <span class="node-label">HealthPod Sessions</span>
+      <h3>Nurse-Led Community Screening</h3>
+      <p style="font-size:11.5px; color:#4a6070; margin-bottom:4px;">Structured checklists · Optional voice notes</p>
+      <div class="gender-grid">
+        <div class="gender-box gw">
+          <strong>Women · 2 days</strong>
+          VIA/VILI · CBE · Rapid FIT
+        </div>
+        <div class="gender-box gm">
+          <strong>Men · 2 days</strong>
+          CBE · Rapid FIT · Targeted PSA (lab)
+        </div>
+      </div>
+      <ul style="margin-top:6px;">
+        <li>Clinician escalation for abnormal findings</li>
+      </ul>
+    </div>
+
+    <!-- arrow right -->
+    <div class="mini-arrow" style="padding:0 2px;">
+      <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="8" x2="14" y2="8" stroke="#6a90b8" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="13,4 21,8 13,12" fill="#003366"/>
+      </svg>
+    </div>
+
+    <!-- Clinician -->
+    <div class="node c-clinician">
+      <span class="node-label">Clinician Review</span>
+      <h3>Clinician Review Queue</h3>
+      <ul>
+        <li>Abnormal VIA/VILI &bull; Suspicious CBE</li>
+        <li>FIT+ &bull; PSA abnormal &bull; Red flags</li>
+        <li>Decision recorded → Referral plan</li>
+        <li>Follow-up due dates set</li>
+      </ul>
+    </div>
+
+  </div><!-- /row-2 -->
+
+  <!-- connector: row2-col2 down-left to row3-col1 -->
+  <div style="position:relative; height:32px;">
+    <svg width="100%" height="32" style="position:absolute; top:0; left:0;" viewBox="0 0 1060 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 780 0 L 780 16 Q 780 26 770 26 L 290 26 Q 280 26 280 16 L 280 32"
+            fill="none" stroke="#6a90b8" stroke-width="2.5" stroke-linecap="round"/>
+      <polygon points="274,26 280,34 286,26" fill="#003366"/>
+    </svg>
+  </div>
+
+  <!-- ══════════ ROW 3: nazareth + follow-up ══════════ -->
+  <div style="display:grid; grid-template-columns:1fr 28px 1fr; gap:0; align-items:stretch;">
+
+    <!-- Nazareth -->
+    <div class="node c-nazareth">
+      <span class="node-label">Nazareth Hospital</span>
+      <h3>Definitive Care Partner</h3>
+      <ul>
+        <li>Confirmatory diagnostics &amp; treatment</li>
+        <li>Receives referrals from HealthPod pathway</li>
+        <li>Outcome feedback loop to CHP console</li>
+      </ul>
+    </div>
+
+    <!-- arrow right -->
+    <div class="mini-arrow" style="padding:0 2px;">
+      <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="8" x2="14" y2="8" stroke="#008081" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="13,4 21,8 13,12" fill="#008081"/>
+      </svg>
+    </div>
+
+    <!-- Follow-up -->
+    <div class="node c-followup">
+      <span class="node-label">Follow-up &amp; Recall</span>
+      <h3>Closed-Loop Navigation</h3>
+      <ul>
+        <li>CHP closed-loop navigation</li>
+        <li>Annual FIT due-date reminders</li>
+        <li>Rebooking for missed appointments</li>
+        <li>Equity supports: vouchers &amp; future SHA integration</li>
+      </ul>
+    </div>
+
+  </div><!-- /row-3 -->
+
+  <!-- ══════════ ROW 4: Stepped Wedge + HealthPod definition ══════════ -->
+  <div class="row-divider" style="margin-top:20px;">
+    <span>Evaluation Design &amp; Key Definitions</span>
+  </div>
+
+  <div class="row-4">
+
+    <!-- Stepped Wedge -->
+    <div class="node c-wedge">
+      <span class="node-label">Stepped-Wedge Evaluation</span>
+      <div class="wedge-stage">
+        <span class="stage-pill stage-control">Stage 0 · Control</span>
+        <div class="wedge-flow">
+          Enrollment → direct referral to <strong>Nazareth</strong> for screening &amp; decisions
+        </div>
+      </div>
+      <div class="wedge-stage">
+        <span class="stage-pill stage-intervention">Stage 1 · Intervention</span>
+        <div class="wedge-flow">
+          Enrollment → <em>HealthPod sessions</em> + decision support → Nazareth for definitive care
+        </div>
+      </div>
+    </div>
+
+    <!-- HealthPod Definition -->
+    <div class="node c-healthpod-def">
+      <span class="node-label">HealthPod · Defined</span>
+      <h3 style="font-size:13px; margin-bottom:4px;">A HealthPod is both:</h3>
+      <ul>
+        <li>A <strong>workflow model</strong> — predictable service cadence, staffing &amp; SOPs</li>
+        <li>A <strong>physical screening site</strong> (where needed) that brings services closer to communities</li>
+        <li><strong>Browser-first:</strong> one link, no app installs</li>
+      </ul>
+    </div>
+
+  </div><!-- /row-4 -->
+
+  <!-- FIGURE CAPTION -->
+  <div class="caption-box">
+    <div class="caption-label">Figure 1 — Caption</div>
+    <p><strong>Community-to-clinic cancer prevention pipeline (OCSI → HealthPod → AI-enabled decision support).</strong> Community Health Promoters (CHPs) enroll eligible community members continuously within Community Health Units (CHUs) using a browser-based digital prescreening tool (QR/web link) with automatic case assignment by CHU. A role-based console provides bounded AI decision support for prioritization, session booking into a monthly four-day HealthPod "Cancer Week," counseling scripts, follow-up tasking, and escalation triggers. During HealthPod sessions, nurses perform VIA/VILI and clinical breast examination (CBE), while a lab technician supports rapid FIT and targeted PSA testing; abnormal findings and red-flag profiles are routed to a clinician review queue for decisions and referral planning. Nazareth Hospital serves as the definitive care and treatment partner, receiving appropriate referrals and providing a feedback loop; follow-up and annual recall (e.g., annual FIT) are supported through closed-loop navigation, with equity mechanisms such as vouchers and future SHA integration.</p>
+  </div>
+
+</div>
+</body>
+</html>

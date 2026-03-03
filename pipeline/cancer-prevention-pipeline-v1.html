@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAHA Cancer Prevention Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #4FC3F7;
+    --lavender: #bfacfe;
+    --teal: #008081;
+    --navy: #003366;
+    --white: #f9f9f9;
+    --mid: #e8f4f8;
+    --dark-teal: #005f60;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: #1a2a3a;
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+
+  .page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .org-tag {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(22px, 4vw, 34px);
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: #5a7090;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    padding: 9px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    background: #dde8f0;
+    color: #4a6070;
+  }
+
+  .tab.active {
+    background: var(--navy);
+    color: white;
+  }
+
+  .tab:hover:not(.active) {
+    border-color: var(--navy);
+    color: var(--navy);
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* PIPELINE STEPS */
+  .pipeline {
+    position: relative;
+  }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 6px;
+    position: relative;
+  }
+
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 52px;
+    flex-shrink: 0;
+  }
+
+  .step-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .connector {
+    width: 3px;
+    flex: 1;
+    min-height: 28px;
+    margin-top: 4px;
+  }
+
+  .step-card {
+    flex: 1;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border-left: 4px solid transparent;
+  }
+
+  .step-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--navy);
+  }
+
+  .step-card .location-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+
+  .step-card p {
+    font-size: 13px;
+    color: #4a6070;
+    line-height: 1.6;
+  }
+
+  .step-card ul {
+    list-style: none;
+    margin-top: 8px;
+  }
+
+  .step-card ul li {
+    font-size: 13px;
+    color: #4a6070;
+    padding: 2px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .step-card ul li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-size: 11px;
+  }
+
+  /* Color themes per step */
+  .s1 .step-num { background: var(--sky); }
+  .s1 .connector { background: linear-gradient(to bottom, var(--sky), var(--teal)); }
+  .s1 .step-card { background: #e8f7fe; border-color: var(--sky); }
+  .s1 .location-tag { background: #c5eafb; color: #1a6d90; }
+
+  .s2 .step-num { background: var(--teal); }
+  .s2 .connector { background: linear-gradient(to bottom, var(--teal), var(--teal)); }
+  .s2 .step-card { background: #e6f4f4; border-color: var(--teal); }
+  .s2 .location-tag { background: #b3dfdf; color: var(--dark-teal); }
+
+  .s3 .step-num { background: var(--lavender); }
+  .s3 .connector { background: linear-gradient(to bottom, var(--lavender), var(--navy)); }
+  .s3 .step-card { background: #f2effe; border-color: var(--lavender); }
+  .s3 .location-tag { background: #dfd8fc; color: #5740b0; }
+
+  .s4 .step-num { background: #6a90b8; }
+  .s4 .connector { background: linear-gradient(to bottom, #6a90b8, var(--navy)); }
+  .s4 .step-card { background: #eaf1f8; border-color: #6a90b8; }
+  .s4 .location-tag { background: #c9ddf0; color: #2a567a; }
+
+  .s5 .step-num { background: var(--navy); }
+  .s5 .connector { background: linear-gradient(to bottom, var(--navy), #334); }
+  .s5 .step-card { background: #e6ecf5; border-color: var(--navy); }
+  .s5 .location-tag { background: #b8cbe0; color: var(--navy); }
+
+  .s6 .step-num { background: #2a7560; }
+  .s6 .connector { background: linear-gradient(to bottom, #2a7560, transparent); }
+  .s6 .step-card { background: #e6f2ef; border-color: #2a7560; }
+  .s6 .location-tag { background: #b3d9ce; color: #1a5040; }
+
+  .no-connector .connector { display: none; }
+
+  /* Gender badges */
+  .gender-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .gender-box {
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .gender-box.women {
+    background: #fce8f5;
+    border-left: 3px solid #d060a0;
+  }
+
+  .gender-box.men {
+    background: #e8f0fe;
+    border-left: 3px solid #4060c0;
+  }
+
+  .gender-box strong {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .gender-box.women strong { color: #a03080; }
+  .gender-box.men strong { color: #3050a0; }
+
+  /* STEPPED WEDGE */
+  .wedge-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .wedge-card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #d0dde8;
+  }
+
+  .wedge-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .wedge-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  .wedge-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  .wedge-header p {
+    font-size: 12px;
+    color: #7a90a0;
+    margin-top: 1px;
+  }
+
+  .wedge-body {
+    padding: 16px 20px;
+    background: white;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .flow-node {
+    padding: 7px 13px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: #94a0b0;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  .stage0 .wedge-header { background: #eaf1f8; }
+  .stage0 .wedge-badge { background: #c5d8ec; color: var(--navy); }
+  .stage0 .flow-node { background: #dde8f5; color: #2a4a6a; }
+  .stage0 .flow-node.highlight { background: var(--navy); color: white; }
+
+  .stage1 .wedge-header { background: #e6f4f4; }
+  .stage1 .wedge-badge { background: #b0d8d8; color: var(--dark-teal); }
+  .stage1 .flow-node { background: #d0eeee; color: #1a5050; }
+  .stage1 .flow-node.highlight { background: var(--teal); color: white; }
+  .stage1 .flow-node.new { background: var(--lavender); color: #3a2080; border: none; }
+
+  /* BULLETS PANEL */
+  .bullets-list {
+    list-style: none;
+    display: grid;
+    gap: 14px;
+  }
+
+  .bullets-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: white;
+    border-radius: 10px;
+    padding: 14px 18px;
+    border: 1px solid #dce8f0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #2a3a4a;
+  }
+
+  .bullets-list li .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* DEFINITION BOX */
+  .definition-box {
+    margin-top: 32px;
+    border: 1.5px solid var(--teal);
+    border-radius: 12px;
+    padding: 16px 20px;
+    background: #eef8f8;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .def-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .def-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+
+  .definition-box p {
+    font-size: 13px;
+    color: #2a4a4a;
+    line-height: 1.6;
+  }
+
+  .definition-box strong {
+    color: var(--dark-teal);
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <div class="header">
+    <div class="org-tag">Tujali Afya Health Alliance</div>
+    <h1>Community-to-Clinic Cancer Prevention Pipeline</h1>
+    <p class="subtitle">From community outreach to definitive care — how TAHA and Nazareth Hospital work together</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('overview')">Full Pipeline</div>
+    <div class="tab" onclick="showTab('wedge')">Control vs. Intervention</div>
+    <div class="tab" onclick="showTab('bullets')">Quick Summary</div>
+  </div>
+
+  <!-- FULL PIPELINE -->
+  <div class="panel active" id="overview">
+    <div class="pipeline">
+
+      <div class="step s1">
+        <div class="step-left">
+          <div class="step-num">1</div>
+          <div class="connector"></div>
+        </div>
+        <div class="step-card">
+          <span class="location-tag">Community</span>
+          <h3>CHP Outreach &amp; Continuous Enrollment</h3>
+          <p>Community Health Promoters (CHPs) reach people where they are — homes, churches, markets, workplaces, and boda groups — every month, not just during campaigns.</p>
+          <ul>
+            <li>Mobile web prescreening via QR code or link → results sent to Supabase</li>
+            <li>Cases automatically assigned to a CHP by Community Health Unit (CHU)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step s2">
+        <div class="step-left">
+          <div class="step-num">2</div>
+          <div class="connector"></div>
+        </div>
+        <div class="step-card">
+          <span class="location-tag">Digital Platform</span>
+          <h3>Decision Support Console</h3>
+          <p>A bounded AI tool helps CHPs manage their caseload without overstepping clinical boundaries.</p>
+          <ul>
+            <li>Priority routing: <strong>Green / Amber / Red</strong> triage flags</li>
+            <li>Counselling scripts for common barriers: fear, cost, distance</li>
+            <li>Appointment booking, automated reminders, and follow-up task lists</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step s3">
+        <div class="step-left">
+          <div class="step-num">3</div>
+          <div class="connector"></div>
+        </div>
+        <div class="step-card">
+          <span class="location-tag">HealthPod — Monthly "Cancer Week"</span>
+          <h3>Nurse-Led Community Screening</h3>
+          <p>A structured two-day-per-group service window, close to where people live.</p>
+          <div class="gender-grid">
+            <div class="gender-box women">
+              <strong>Women (2 days)</strong>
+              VIA/VILI · Clinical Breast Exam (CBE) · Rapid FIT
+            </div>
+            <div class="gender-box men">
+              <strong>Men (2 days)</strong>
+              CBE · Rapid FIT · Targeted PSA (lab-supported)
+            </div>
+          </div>
+          <ul style="margin-top:10px">
+            <li>Structured checklists + optional voice note documentation</li>
+            <li>Clinician escalation protocol for any abnormal findings</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step s4">
+        <div class="step-left">
+          <div class="step-num">4</div>
+          <div class="connector"></div>
+        </div>
+        <div class="step-card">
+          <span class="location-tag">Clinician Review</span>
+          <h3>Referral &amp; Navigation</h3>
+          <p>Abnormal findings trigger a closed-loop referral process so no patient slips through the gap.</p>
+          <ul>
+            <li>Auto-generated referral pack sent with the patient</li>
+            <li>CHP remains the named navigator and follows up until attendance is confirmed</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step s5">
+        <div class="step-left">
+          <div class="step-num">5</div>
+          <div class="connector"></div>
+        </div>
+        <div class="step-card">
+          <span class="location-tag">Nazareth Hospital</span>
+          <h3>Definitive Diagnosis &amp; Treatment</h3>
+          <p>Nazareth Hospital provides all confirmatory diagnostics and clinical treatment. Results feed back into the system to close the loop for the referring CHP.</p>
+        </div>
+      </div>
+
+      <div class="step s6 no-connector">
+        <div class="step-left">
+          <div class="step-num">6</div>
+          <div class="connector"></div>
+        </div>
+        <div class="step-card">
+          <span class="location-tag">Ongoing</span>
+          <h3>Annual Recall &amp; Quality Improvement</h3>
+          <ul>
+            <li>Annual FIT due-date reminders for eligible clients</li>
+            <li>Follow-up completion tracked per CHP and CHU</li>
+            <li>Data feeds a replication toolkit for scaling to new CHUs</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="definition-box">
+      <div class="def-icon">🏥</div>
+      <div>
+        <div class="def-label">What is a HealthPod?</div>
+        <p>A <strong>HealthPod</strong> is a nurse-led screening delivery point and workflow model that brings specified services closer to communities — implemented as a physical site when needed, and always implemented as a structured service cadence (<em>"Cancer Week"</em>) with standardised staffing, documentation, escalation, and follow-up.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEPPED WEDGE -->
+  <div class="panel" id="wedge">
+    <div class="wedge-grid">
+
+      <div class="wedge-card stage0">
+        <div class="wedge-header">
+          <div>
+            <div class="wedge-badge">Stage 0 — Control</div>
+            <h3>Nazareth-First Model</h3>
+            <p>Current standard practice: community screening happens at the hospital</p>
+          </div>
+        </div>
+        <div class="wedge-body">
+          <div class="flow-row">
+            <div class="flow-node">CHP prescreens<br><small>(QR / web tool)</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Case assigned<br><small>by CHU</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node highlight">Direct referral<br>to Nazareth</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Follow-up</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wedge-card stage1">
+        <div class="wedge-header">
+          <div>
+            <div class="wedge-badge">Stage 1 — Intervention</div>
+            <h3>HealthPod-First Model</h3>
+            <p>Screening moves closer to the community; Nazareth handles confirmation and treatment</p>
+          </div>
+        </div>
+        <div class="wedge-body">
+          <div class="flow-row">
+            <div class="flow-node">CHP prescreens<br><small>(QR / web tool)</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Case assigned<br><small>by CHU</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node new">Booking into<br>HealthPod Cancer Week</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node new">Nurse-led screening<br><small>VIA/VILI · CBE · FIT/PSA</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node new">Clinician review<br><small>abnormals escalated</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node highlight">Nazareth — confirmation<br>&amp; treatment</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Closed-loop<br>follow-up &amp; annual recall</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="definition-box" style="margin-top:24px">
+      <div class="def-icon">📊</div>
+      <div>
+        <div class="def-label">What the stepped-wedge shows</div>
+        <p>In the <strong>control arm</strong>, Nazareth Hospital is both the screening site and treatment centre. In the <strong>intervention arm</strong>, community-proximate HealthPod screening is inserted before Nazareth referral — reducing the burden on the hospital while bringing care closer to patients. Outcomes across both arms are compared to evaluate the model.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK BULLETS -->
+  <div class="panel" id="bullets">
+    <ul class="bullets-list">
+      <li>
+        <div class="icon" style="background:#e6f7fe;">🏘️</div>
+        <div><strong>CHPs enroll continuously within CHUs</strong> using a mobile web tool. Cases auto-assign by CHU so every person has a named community health promoter responsible for them.</div>
+      </li>
+      <li>
+        <div class="icon" style="background:#e6f4f4;">💻</div>
+        <div><strong>A decision-support console</strong> helps CHPs prioritise cases, book appointments, use counselling scripts, and track follow-up tasks — within clearly bounded, non-clinical limits.</div>
+      </li>
+      <li>
+        <div class="icon" style="background:#f2effe;">🩺</div>
+        <div><strong>Monthly HealthPod "Cancer Week" sessions</strong> deliver nurse-led VIA/VILI, clinical breast exams, and lab-supported FIT/PSA testing — close to where people live. Clinicians review all abnormal results.</div>
+      </li>
+      <li>
+        <div class="icon" style="background:#e6ecf5;">🏥</div>
+        <div><strong>Nazareth Hospital provides definitive care.</strong> Referrals are closed-loop: CHPs track attendance, and outcomes feed back into the platform. Eligible clients receive annual FIT recall reminders.</div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(name).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>

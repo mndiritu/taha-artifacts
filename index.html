@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAHA Artifacts — Tujali Afya Health Alliance</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/taha-brand.css">
+<style>
+  body { background: var(--taha-white); }
+
+  .page {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 52px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .site-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .site-brand .org {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--taha-teal);
+  }
+
+  .site-brand h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(20px, 3vw, 26px);
+    color: var(--taha-navy);
+    line-height: 1.2;
+  }
+
+  .site-brand .tagline {
+    font-size: 12.5px;
+    color: var(--taha-text-muted);
+    margin-top: 2px;
+  }
+
+  .header-meta {
+    text-align: right;
+    font-size: 11.5px;
+    color: var(--taha-text-muted);
+    line-height: 1.7;
+  }
+
+  .header-meta a {
+    color: var(--taha-teal);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--taha-text-muted);
+    margin-right: 4px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--taha-border);
+    background: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--taha-text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--taha-navy);
+    border-color: var(--taha-navy);
+    color: white;
+  }
+
+  /* ── GRID ── */
+  .artifact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .artifact-card {
+    background: white;
+    border: 1.5px solid var(--taha-border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.15s;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .artifact-card:hover {
+    box-shadow: 0 8px 28px rgba(0,51,102,0.12);
+    transform: translateY(-2px);
+  }
+
+  .card-stripe {
+    height: 5px;
+    width: 100%;
+  }
+
+  .stripe-pipeline    { background: linear-gradient(90deg, var(--taha-sky), var(--taha-teal)); }
+  .stripe-governance  { background: linear-gradient(90deg, var(--taha-navy), #4a7ab0); }
+  .stripe-partnerships{ background: linear-gradient(90deg, var(--taha-lavender), #8060d0); }
+  .stripe-screening   { background: linear-gradient(90deg, var(--taha-teal), var(--taha-sky)); }
+  .stripe-comms       { background: linear-gradient(90deg, var(--taha-gold), #e07000); }
+
+  .card-body {
+    padding: 18px 18px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-category {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+
+  .cat-pipeline    { background: var(--taha-sky-light);      color: #1a6d90; }
+  .cat-governance  { background: var(--taha-navy-light);     color: var(--taha-navy); }
+  .cat-partnerships{ background: var(--taha-lavender-light); color: #4a30b0; }
+  .cat-screening   { background: var(--taha-teal-light);     color: var(--taha-teal); }
+  .cat-comms       { background: var(--taha-gold-light);     color: #7a5200; }
+
+  .card-version {
+    font-size: 10px;
+    color: var(--taha-text-muted);
+    font-weight: 500;
+  }
+
+  .card-title {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--taha-navy);
+    line-height: 1.35;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--taha-text-muted);
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .card-footer {
+    padding: 10px 18px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #eef2f6;
+  }
+
+  .card-date {
+    font-size: 11px;
+    color: #9ab0c4;
+  }
+
+  .card-cta {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--taha-teal);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .card-cta::after { content: "→"; }
+
+  /* Placeholder card */
+  .artifact-card.placeholder {
+    border-style: dashed;
+    border-color: #c8d8e4;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .placeholder .card-title { color: #8aa0b4; }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--taha-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 11.5px;
+    color: var(--taha-text-muted);
+  }
+
+  .site-footer a {
+    color: var(--taha-teal);
+    text-decoration: none;
+  }
+
+  /* ── HIDDEN class for filtering ── */
+  .artifact-card.hidden { display: none; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .site-header { flex-direction: column; align-items: flex-start; }
+    .header-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="org">Tujali Afya Health Alliance</span>
+      <h1>TAHA Artifacts</h1>
+      <p class="tagline">Visual documents, interactive diagrams &amp; stakeholder materials</p>
+    </div>
+    <div class="header-meta">
+      NGO-BWUJDK4 · Kenya<br>
+      <a href="https://tujaliafya.org" target="_blank">tujaliafya.org</a> ·
+      <a href="https://github.com/mndiritu/taha-artifacts" target="_blank">GitHub</a>
+    </div>
+  </header>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="filter('all', this)">All</button>
+    <button class="filter-btn" onclick="filter('pipeline', this)">Pipeline</button>
+    <button class="filter-btn" onclick="filter('governance', this)">Governance</button>
+    <button class="filter-btn" onclick="filter('partnerships', this)">Partnerships</button>
+    <button class="filter-btn" onclick="filter('screening', this)">Screening</button>
+    <button class="filter-btn" onclick="filter('comms', this)">Communications</button>
+  </div>
+
+  <!-- ARTIFACT GRID -->
+  <div class="artifact-grid" id="grid">
+
+    <!-- PIPELINE v1 -->
+    <a class="artifact-card" href="pipeline/cancer-prevention-pipeline-v1.html" data-cat="pipeline">
+      <div class="card-stripe stripe-pipeline"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-category cat-pipeline">Pipeline</span>
+          <span class="card-version">v1</span>
+        </div>
+        <div class="card-title">Cancer Prevention Pipeline — Interactive Tabs</div>
+        <div class="card-desc">Full 6-step community-to-clinic pipeline with tabbed views: full pipeline, stepped-wedge control vs. intervention, and quick summary bullets.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">Mar 2026</span>
+        <span class="card-cta">View</span>
+      </div>
+    </a>
+
+    <!-- PIPELINE v2 -->
+    <a class="artifact-card" href="pipeline/cancer-prevention-pipeline-v2.html" data-cat="pipeline">
+      <div class="card-stripe stripe-pipeline"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-category cat-pipeline">Pipeline</span>
+          <span class="card-version">v2 · current</span>
+        </div>
+        <div class="card-title">Cancer Prevention Pipeline — Figure Diagram</div>
+        <div class="card-desc">Structured flow diagram matching the proposal figure format. Includes AI-enabled decision support node, gender-split screening, clinician review queue, stepped-wedge conditions, and figure caption.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">Mar 2026</span>
+        <span class="card-cta">View</span>
+      </div>
+    </a>
+
+    <!-- PLACEHOLDER: Governance -->
+    <div class="artifact-card placeholder" data-cat="governance">
+      <div class="card-stripe stripe-governance"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-category cat-governance">Governance</span>
+          <span class="card-version">coming</span>
+        </div>
+        <div class="card-title">Board Pack — Q1 2026</div>
+        <div class="card-desc">2025 highlights, audited accounts summary, governance matters, and 2026 priorities.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">—</span>
+        <span class="card-cta" style="color:#9ab0c4;">Pending</span>
+      </div>
+    </div>
+
+    <!-- PLACEHOLDER: MoU Summary -->
+    <div class="artifact-card placeholder" data-cat="partnerships">
+      <div class="card-stripe stripe-partnerships"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-category cat-partnerships">Partnerships</span>
+          <span class="card-version">coming</span>
+        </div>
+        <div class="card-title">TAHA–Nazareth Hospital MoU — Visual Summary</div>
+        <div class="card-desc">Key pillars, clinical liability divisions, and partnership structure at a glance.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">—</span>
+        <span class="card-cta" style="color:#9ab0c4;">Pending</span>
+      </div>
+    </div>
+
+    <!-- PLACEHOLDER: Cancer Week -->
+    <div class="artifact-card placeholder" data-cat="screening">
+      <div class="card-stripe stripe-screening"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-category cat-screening">Screening</span>
+          <span class="card-version">coming</span>
+        </div>
+        <div class="card-title">HealthPod Cancer Week — Service Overview</div>
+        <div class="card-desc">Monthly 4-day session structure, staffing model, screening menu by gender, and escalation protocol.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">—</span>
+        <span class="card-cta" style="color:#9ab0c4;">Pending</span>
+      </div>
+    </div>
+
+    <!-- PLACEHOLDER: Donor update -->
+    <div class="artifact-card placeholder" data-cat="comms">
+      <div class="card-stripe stripe-comms"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-category cat-comms">Communications</span>
+          <span class="card-version">coming</span>
+        </div>
+        <div class="card-title">Donor &amp; Stakeholder Update — 2025</div>
+        <div class="card-desc">Annual highlights, impact numbers, programme milestones, and 2026 focus areas.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">—</span>
+        <span class="card-cta" style="color:#9ab0c4;">Pending</span>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <span>© Tujali Afya Health Alliance · NGO-BWUJDK4 · Kenya</span>
+    <span>
+      <a href="https://tujaliafya.org" target="_blank">tujaliafya.org</a> ·
+      <a href="https://github.com/mndiritu/taha-artifacts" target="_blank">Edit on GitHub</a>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+  function filter(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.artifact-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+</script>
+</body>
+</html>
